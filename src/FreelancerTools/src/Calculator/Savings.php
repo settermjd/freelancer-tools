@@ -8,7 +8,7 @@ class Savings
 {
 	public function calculatePercentage(float $paymentAmount, $percentage): float
 	{
-		return (float) money_format('%.2n', $paymentAmount * $percentage);
+		return $paymentAmount * $percentage;
 	}
 
 	public function calculateSavings($payment, $vat, $incomeTax, $savings)
