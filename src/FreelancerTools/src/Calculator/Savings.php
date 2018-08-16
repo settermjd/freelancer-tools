@@ -6,9 +6,9 @@ namespace FreelancerTools\Calculator;
 
 class Savings
 {
-	public function calculatePercentage(float $paymentAmount, $mwstPercentage): float
+	public function calculatePercentage(float $paymentAmount, $percentage): float
 	{
-		return (float) money_format('%.2n', $paymentAmount * $mwstPercentage);
+		return (float) money_format('%.2n', $paymentAmount * $percentage);
 	}
 
 	public function calculateSavings($payment, $vat, $incomeTax, $savings)
