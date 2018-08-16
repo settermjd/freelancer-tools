@@ -6,14 +6,28 @@ namespace FreelancerTools\Calculator;
 
 class Savings
 {
-	const TaxPercentage = 0.19;
-
-	public function calculateVat(float $paymentAmount, $mwstPercentage): float
+	public function calculatePercentage(float $paymentAmount, $mwstPercentage): float
 	{
-		if (is_null($mwstPercentage)) {
-			$mwstPercentage = self::TaxPercentage;
-		}
-		
 		return (float) money_format('%.2n', $paymentAmount * $mwstPercentage);
+	}
+
+	public function calculateSavings($payment, $vat, $incomeTax, $savings)
+	{
+		if ($vat === 0) {
+			$entity = new \FreelancerTools\Entity\Savings(
+				0,
+				$this->calculatePercentage($payment, $incomeTax),
+				$this->calculatePercentage($payment, $savings)
+			);
+		} else {
+			$vatAmount = $this->calculatePercentage($payment, $vat);
+			$entity = new \FreelancerTools\Entity\Savings(
+				$vatAmount,
+				$this->calculatePercentage($payment - $vatAmount, $incomeTax),
+				$this->calculatePercentage($payment - $vatAmount, $savings)
+			);
+		}
+
+		return $entity;
 	}
 }
