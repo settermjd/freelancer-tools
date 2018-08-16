@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace FreelancerTools\Calculator;
 
+use \FreelancerTools\Entity\Savings as SavingsEntity;
 
 class Savings
 {
@@ -12,22 +13,14 @@ class Savings
 	}
 
 	public function calculateSavings($payment, $vat, $incomeTax, $savings)
+	public function calculateSavings(float $payment, float $vatPerc, float $incomeTaxPerc, float $savingsPerc): SavingsEntity
 	{
-		if ($vat === 0) {
-			$entity = new \FreelancerTools\Entity\Savings(
-				0,
-				$this->calculatePercentage($payment, $incomeTax),
-				$this->calculatePercentage($payment, $savings)
-			);
-		} else {
-			$vatAmount = $this->calculatePercentage($payment, $vat);
-			$entity = new \FreelancerTools\Entity\Savings(
-				$vatAmount,
-				$this->calculatePercentage($payment - $vatAmount, $incomeTax),
-				$this->calculatePercentage($payment - $vatAmount, $savings)
-			);
-		}
+		$vatAmount = ($vatPerc === 0) ? $vatPerc : $this->calculatePercentage($payment, $vatPerc);
 
-		return $entity;
+		return new SavingsEntity(
+			$vatAmount,
+			$this->calculatePercentage($payment - $vatAmount, $incomeTaxPerc),
+			$this->calculatePercentage($payment - $vatAmount, $savingsPerc)
+		);
 	}
 }
